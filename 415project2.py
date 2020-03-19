@@ -1,4 +1,7 @@
 from collections import defaultdict
+import random
+import pprint
+import linecache
 
 class Client:
     def __init__(self, name, start, end, value):
@@ -54,16 +57,21 @@ class DAG:
 
     def description(self):
         print(self.graph)
+        # pprint.pprint(self.graph)
 
 
 def main():
-    c1 = Client('A', 1, 2, 5)
-    c2 = Client('B', 2, 3, 5)
-    c3 = Client('C', 3, 4, 5)
-    c4 = Client('D', 2, 4, 5)
-    c5 = Client('E', 4, 6, 5)
-    list = [c1, c2, c3, c4, c5]
-    graph = DAG(list)
+    filename = input('En†er file name ')
+    file = open(filename)
+    clientId = 0
+    listofClients = []
+    for line in file:
+        clientData = line.split()
+        newClient = Client(clientId, clientData[0],  clientData[1],  clientData[2])
+        # Clientname = chr(ord(Clientname) + 1)
+        clientId += 1
+        listofClients.append(newClient)
+    graph = DAG(listofClients)
     graph.description()
 
 
