@@ -19,22 +19,28 @@ class Client:
 class DAG:
     def __init__(self, list):
         self.clientlist = list
+        self.clientNames = []
+        for elem in list:
+            self.clientNames.append(elem.name)
         self.graph = {}
         self.buildgraph()
 
     def buildgraph(self):
         # double for loops to check every client
-        self.graph['Start'] = []
+        start = self.clientNames
         for elem in self.clientlist:
             for other in self.clientlist:
                 if elem.end <= other.start:
                     if elem.name not in self.graph.keys():
                         self.graph[elem.name] = []
                     self.graph[elem.name].append(other.name)
-            if elem.end == 100:
-                if elem.name not in self.graph.keys():
-                    self.graph[elem.name] = []
+                    if other.name in start:
+                        start.remove(other.name)
+
+            if elem.name not in self.graph.keys():
+                self.graph[elem.name] = []
                 self.graph[elem.name].append('End')
+        self.graph['Start'] = start
 
     def description(self):
         pprint.pprint(self.graph)
