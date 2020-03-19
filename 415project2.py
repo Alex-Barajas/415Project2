@@ -15,8 +15,21 @@ class Client:
         print(self.end)
         print(self.value)
 
+    def getEnd(self):
+        return self.end
+
+    def getStart(self):
+        return self.start
+
+    def getvalue(self):
+        return self.value
+
+    def getName(self):
+        return self.name
+
 
 class DAG:
+    # pass a list of client objects to create the DAG ?
     def __init__(self, list):
         self.clientlist = list
         self.clientNames = []
@@ -36,7 +49,7 @@ class DAG:
                     self.graph[elem.name].append(other.name)
                     if other.name in start:
                         start.remove(other.name)
-
+                        
             if elem.name not in self.graph.keys():
                 self.graph[elem.name] = []
                 self.graph[elem.name].append('End')
