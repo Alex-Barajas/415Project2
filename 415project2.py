@@ -3,6 +3,7 @@ import random
 import pprint
 import linecache
 
+
 class Client:
     def __init__(self, name, start, end, value):
         self.name = name
@@ -31,7 +32,7 @@ class Client:
 class DAG:
     # pass a list of client objects to create the DAG ?
     def __init__(self, list):
-        self.clientlist = list
+        self.clientList = list
         self.clientNames = []
         self.startClients = []
         self.edges = {}
@@ -39,14 +40,13 @@ class DAG:
             self.clientNames.append(elem.name)
             self.edges[elem.name] = 0
         self.graph = {}
-        self.buildgraph()
+        self.buildGraph()
 
-
-    def buildgraph(self):
+    def buildGraph(self):
         # double for loops to check every client
         start = self.clientNames
-        for elem in self.clientlist:
-            for other in self.clientlist:
+        for elem in self.clientList:
+            for other in self.clientList:
                 if int(elem.end) <= int(other.start) and elem.name != other.name:
                     if elem.name not in self.graph.keys():
                         self.graph[elem.name] = []
@@ -54,7 +54,6 @@ class DAG:
                     self.edges[other.name] += 1
                     if other.name in start:
                         start.remove(other.name)
-                        
             if elem.name not in self.graph.keys():
                 self.graph[elem.name] = []
                 self.graph[elem.name].append('End')
@@ -62,7 +61,7 @@ class DAG:
         self.startClients = start
 
     def description(self):
-        #print(self.graph)
+        # print(self.graph)
         pprint.pprint(self.graph)
 
     def dict(self):
@@ -75,9 +74,8 @@ def top_sort(graph):
     templist = []
     dict = graph.dict()
     incomingEdges = graph.edges
-
     while queue:
-        ver = queue.pop(0) # A
+        ver = queue.pop(0)  # A
         verNeighnors = dict[ver]
         for client in verNeighnors:
             if client != 'End':
@@ -88,19 +86,19 @@ def top_sort(graph):
 
 
 def main():
-    filename = input('En†er file name ')
+    filename = input('En†er file name: ')
     file = open(filename)
     clientId = 'A'
-    listofClients = []
+    listOfClients = []
     for line in file:
         clientData = line.split()
-        newClient = Client(clientId, clientData[0],  clientData[1],  clientData[2])
+        newClient = Client(clientId, clientData[0], clientData[1], clientData[2])
         clientId = chr(ord(clientId) + 1)
         # clientId += 1
-        listofClients.append(newClient)
-    graph = DAG(listofClients)
-    top_sort(graph)
+        listOfClients.append(newClient)
+    graph = DAG(listOfClients)
     graph.description()
+    top_sort(graph)
 
 
 main()
