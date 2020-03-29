@@ -92,7 +92,6 @@ def top_sort(graph):
     for elem in incomingEdges:
         if incomingEdges[elem] == 0:
             queue.append(graph.getClient(elem))
-
     while queue:
         ver = queue.pop(0)  # A
         result_top.append(ver)
@@ -168,5 +167,6 @@ def main():
     print(topList)
     print('\nOptimal Path')
     print(optPath(topList, DAGGraph))
+
 
 main()
