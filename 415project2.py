@@ -77,7 +77,6 @@ def top_sort(graph):
     for elem in incomingEdges:
         if incomingEdges[elem] == 0:
             queue.append(elem)
-
     while queue:
         ver = queue.pop(0)  # A
         result_top.append(ver)
@@ -107,6 +106,7 @@ def main():
     graph.description()
     print("\nTop Sort: ")
     print(top_sort(graph))
+
 
 
 main()
