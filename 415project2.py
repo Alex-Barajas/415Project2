@@ -5,7 +5,7 @@ import linecache
 
 class Client:
     def __init__(self, name, start, end, value):
-        self.name = name
+        self.name = str(name)
         self.start = start
         self.end = end
         self.value = int(value)
@@ -68,8 +68,7 @@ class DAG:
         self.startClients = start
 
     def description(self):
-        # print(self.graph)
-        pprint.pprint(self.graph)
+        print(self.graph)
 
     def dict(self):
         return self.graph
@@ -84,7 +83,6 @@ class DAG:
 
 
 def top_sort(graph):
-    # queue = graph.startClients
     queue = []
     result_top = []
     dict = graph.dict()
@@ -101,40 +99,47 @@ def top_sort(graph):
                 incomingEdges[client.name] -= 1
                 if incomingEdges[client.name] == 0:
                     queue.append(client)
-          # dequeue and append to topo sorted
     return result_top
 
+
 def optPath(topList, graph):
-    dict = graph.dict()
-    numClients = len(graph.clientList)
-    # templist = [0] * numClients
+    # dict = graph.dict()
+    # numClients = len(graph.clientList)
+    # # templist = [0] * numClients
+
+    # This portion of the function assigned the maxium value a vertex
+    # can achieve based on its neighbors values, makes use of a tempDict
     tempDict = {}
     for client in graph.clientList:
         tempDict[client] = 0
-
     for vertex in reversed(list(topList)):
-        vertexNeighbor = graph.Neighbors(vertex.name) # get the neighbors of vertex
+        vertexNeighbor = graph.Neighbors(vertex.name)  # get the neighbors of vertex
         vertexValue = vertex.value  # saves value of the vextex
         if vertexNeighbor[0].name != 'End':
-            for Neighbor in vertexNeighbor: # find the neighbor that makes him richest
+            for Neighbor in vertexNeighbor:  # find the neighbor that makes him richest
                 tempMax = vertex.value + tempDict[Neighbor]
-                if(tempMax > vertexValue):
+                if tempMax > vertexValue:
                     vertexValue = tempMax
         tempDict[vertex] = vertexValue
 
-
+    # Using out Temp Dictionary and the orginal DAG we can cross reference to find the optimal path
+    # can start at the start nodes and then go to the its largest neighbor etc etc
     solution = []
     startlist = graph.startClients
     max = maxClient(startlist, tempDict)
     solution.append(max)
-
     while max.name != 'End':
         max = maxClient(graph.Neighbors(max.name), tempDict)
         if max.name == 'End':
             continue
         solution.append(max)
-
-    return solution
+    print('\nOptimal revenue earned is ', tempDict[solution[0]])
+    print('Clients contributing to this optimal revenue: ', end='')
+    for elem in solution:
+        if elem != solution[-1]:
+            print(elem, end=', ')
+        else:
+            print(elem)
 
 
 def maxClient(list, dict):
@@ -148,25 +153,25 @@ def maxClient(list, dict):
 
 
 def main():
-    filename = input('En†er file name: ')
+    filename = input('Enter the file to read data: ')
     file = open(filename)
-    clientId = 'A'
+    clientId = 1
     listOfClients = []
     for line in file:
         clientData = line.split()
         newClient = Client(clientId, clientData[0], clientData[1], clientData[2])
-        clientId = chr(ord(clientId) + 1)
-        # clientId += 1
+        # clientId = chr(ord(clientId) + 1)
+        clientId += 1
         listOfClients.append(newClient)
+    print("\nThere are ", len(listOfClients), " clients in this file")
     DAGGraph = DAG(listOfClients)
-    print('\nDAG Dictionary:')
+    # print('\nDAG Dictionary:')
     graph = DAGGraph.dict()
-    print(graph)
-    print("\nTop Sort: ")
+    # print(graph)
+    # print("\nTop Sort: ")
     topList = (top_sort(DAGGraph))
-    print(topList)
-    print('\nOptimal Path')
-    print(optPath(topList, DAGGraph))
+    # print(topList)
+    optPath(topList, DAGGraph)
 
 
 main()
