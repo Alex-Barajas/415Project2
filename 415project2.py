@@ -69,19 +69,25 @@ class DAG:
 
 
 def top_sort(graph):
-    queue = graph.startClients
+    # queue = graph.startClients
+    queue = []
     result_top = []
-    templist = []
     dict = graph.dict()
     incomingEdges = graph.edges
+    for elem in incomingEdges:
+        if incomingEdges[elem] == 0:
+            queue.append(elem)
+
     while queue:
         ver = queue.pop(0)  # A
+        result_top.append(ver)
         verNeighnors = dict[ver]
         for client in verNeighnors:
             if client != 'End':
                 incomingEdges[client] -= 1
-                queue.append(client)
-        result_top.append(ver)  # dequeue and append to topo sorted
+                if incomingEdges[client] == 0:
+                    queue.append(client)
+          # dequeue and append to topo sorted
     return result_top
 
 
@@ -97,8 +103,10 @@ def main():
         # clientId += 1
         listOfClients.append(newClient)
     graph = DAG(listOfClients)
+    print('\nDAG Dictionary:')
     graph.description()
-    top_sort(graph)
+    print("\nTop Sort: ")
+    print(top_sort(graph))
 
 
 main()
