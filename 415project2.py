@@ -134,11 +134,9 @@ def optPath(topList, graph, outfile):
             continue
         solution.append(max)
     outfile.write('\nOptimal revenue earned is ' + str(tempDict[solution[0]]))
-    # print('\nOptimal revenue earned is ', tempDict[solution[0]], file=open(outfile, "a"))
     print('\nOptimal revenue earned is ', tempDict[solution[0]])
 
     outfile.write('\nClients contributing to this optimal revenue: ')
-    # print('Clients contributing to this optimal revenue: ', end='', file=open(outfile, "a"))
     print('Clients contributing to this optimal revenue: ', end='')
     for elem in solution:
         if elem != solution[-1]:
@@ -147,7 +145,6 @@ def optPath(topList, graph, outfile):
         else:
             print(elem)
             outfile.write(str(elem))
-            # print(elem, file=open(outfile, "a"))
 
 
 def maxClient(list, dict):
@@ -165,21 +162,18 @@ def main():
     outfile = 'out' + file
     workingfile = open(outfile, 'w')
     workingfile.write('Read data from: ' + file)
-    # print('Read data from: ', file, file=open(outfile, "a"))
     file = open(file)
     clientId = 1
     listOfClients = []
     for line in file:
         clientData = line.split()
         newClient = Client(clientId, clientData[0], clientData[1], clientData[2])
-        # clientId = chr(ord(clientId) + 1)
         clientId += 1
         listOfClients.append(newClient)
     workingfile.write("\nThere are " + str(len(listOfClients)) + " clients in this file",)
-    # print("\nThere are", len(listOfClients), "clients in this file", file=open(outfile, "a"))
-    # print("\nThere are", len(listOfClients), "clients in this file")
     DAGGraph = DAG(listOfClients)
     topList = (top_sort(DAGGraph))
     optPath(topList, DAGGraph, workingfile)
+
 
 main()
