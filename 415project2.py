@@ -133,13 +133,18 @@ def optPath(topList, graph):
         if max.name == 'End':
             continue
         solution.append(max)
+    print('\nOptimal revenue earned is ', tempDict[solution[0]], file=open("outdata9.txt", "a"))
     print('\nOptimal revenue earned is ', tempDict[solution[0]])
+
+    print('Clients contributing to this optimal revenue: ', end='', file=open("outdata9.txt", "a"))
     print('Clients contributing to this optimal revenue: ', end='')
     for elem in solution:
         if elem != solution[-1]:
             print(elem, end=', ')
+            print(elem, end=', ', file=open("outdata9.txt", "a") )
         else:
             print(elem)
+            print(elem, file=open("outdata9.txt", "a"))
 
 
 def maxClient(list, dict):
@@ -153,8 +158,8 @@ def maxClient(list, dict):
 
 
 def main():
-    filename = input('Enter the file to read data: ')
-    file = open(filename)
+    file = input('Enter the file to read data: ')
+    file = open(file)
     clientId = 1
     listOfClients = []
     for line in file:
@@ -163,7 +168,8 @@ def main():
         # clientId = chr(ord(clientId) + 1)
         clientId += 1
         listOfClients.append(newClient)
-    print("\nThere are ", len(listOfClients), " clients in this file")
+    print("\nThere are", len(listOfClients), "clients in this file", file=open("outdata9.txt", "a"))
+    print("\nThere are", len(listOfClients), "clients in this file")
     DAGGraph = DAG(listOfClients)
     # print('\nDAG Dictionary:')
     graph = DAGGraph.dict()
@@ -172,6 +178,5 @@ def main():
     topList = (top_sort(DAGGraph))
     # print(topList)
     optPath(topList, DAGGraph)
-
 
 main()
