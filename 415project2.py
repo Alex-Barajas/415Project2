@@ -102,7 +102,7 @@ def top_sort(graph):
     return result_top
 
 
-def optPath(topList, graph):
+def optPath(topList, graph, outfile):
     # dict = graph.dict()
     # numClients = len(graph.clientList)
     # # templist = [0] * numClients
@@ -133,13 +133,21 @@ def optPath(topList, graph):
         if max.name == 'End':
             continue
         solution.append(max)
+    outfile.write('\nOptimal revenue earned is ' + str(tempDict[solution[0]]))
+    # print('\nOptimal revenue earned is ', tempDict[solution[0]], file=open(outfile, "a"))
     print('\nOptimal revenue earned is ', tempDict[solution[0]])
+
+    outfile.write('\nClients contributing to this optimal revenue: ')
+    # print('Clients contributing to this optimal revenue: ', end='', file=open(outfile, "a"))
     print('Clients contributing to this optimal revenue: ', end='')
     for elem in solution:
         if elem != solution[-1]:
             print(elem, end=', ')
+            outfile.write(str(elem) + ', ')
         else:
             print(elem)
+            outfile.write(str(elem))
+            # print(elem, file=open(outfile, "a"))
 
 
 def maxClient(list, dict):
@@ -153,8 +161,12 @@ def maxClient(list, dict):
 
 
 def main():
-    filename = input('Enter the file to read data: ')
-    file = open(filename)
+    file = input('Enter the file to read data: ')
+    outfile = 'out' + file
+    workingfile = open(outfile, 'w')
+    workingfile.write('Read data from: ' + file)
+    # print('Read data from: ', file, file=open(outfile, "a"))
+    file = open(file)
     clientId = 1
     listOfClients = []
     for line in file:
@@ -163,15 +175,11 @@ def main():
         # clientId = chr(ord(clientId) + 1)
         clientId += 1
         listOfClients.append(newClient)
-    print("\nThere are ", len(listOfClients), " clients in this file")
+    workingfile.write("\nThere are " + str(len(listOfClients)) + " clients in this file",)
+    # print("\nThere are", len(listOfClients), "clients in this file", file=open(outfile, "a"))
+    # print("\nThere are", len(listOfClients), "clients in this file")
     DAGGraph = DAG(listOfClients)
-    # print('\nDAG Dictionary:')
-    graph = DAGGraph.dict()
-    # print(graph)
-    # print("\nTop Sort: ")
     topList = (top_sort(DAGGraph))
-    # print(topList)
-    optPath(topList, DAGGraph)
-
+    optPath(topList, DAGGraph, workingfile)
 
 main()
